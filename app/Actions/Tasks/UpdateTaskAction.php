@@ -13,7 +13,7 @@ final class UpdateTaskAction
     {
         $task = Task::with(['creator', 'performer'])
             ->findOrFail($id);
-        $task = tap($task)->update([
+        return tap($task)->update([
             'performer_id' => $request->validated('performerId', $task->performer_id),
             'title' => $request->validated('title', $task->title),
             'description' => $request->validated('description', $task->description),
@@ -21,7 +21,6 @@ final class UpdateTaskAction
             'complexity' => $request->validated('complexity', $task->complexity),
             'urgency' => $request->validated('urgency', $task->urgency),
             'deadline_at' => $request->validated('deadlineAt', $task->deadline_at)
-        ]);
-        return $task;
+        ])->refresh();
     }
 }
