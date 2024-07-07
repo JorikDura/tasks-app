@@ -12,7 +12,7 @@ final class StoreTaskAction
     public function __invoke(StoreTaskRequest $request): Task
     {
         $task = Task::create([
-            'creator_id' => auth()->id() ?? 1,
+            'creator_id' => auth()->id() ?? 1 /* TODO:Remove this 1; */,
             'performer_id' => $request->validated('performerId'),
             'title' => $request->validated('title'),
             'description' => $request->validated('description'),
@@ -20,7 +20,7 @@ final class StoreTaskAction
             'complexity' => $request->validated('complexity'),
             'urgency' => $request->validated('urgency'),
             'deadline_at' => $request->validated('deadlineAt'),
-        ]);
+        ])->load(['performer', 'creator']);
         return $task;
     }
 }

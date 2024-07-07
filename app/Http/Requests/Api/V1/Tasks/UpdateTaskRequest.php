@@ -9,17 +9,17 @@ use App\Enums\Status;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreTaskRequest extends FormRequest
+class UpdateTaskRequest extends FormRequest
 {
     public function rules(): array
     {
         return [
             'performerId' => ['nullable', 'int', 'exists:users,id'],
-            'title' => ['required', 'string', 'min:6', 'max:48'],
+            'title' => ['nullable', 'string', 'min:6', 'max:48'],
             'description' => ['nullable', 'string', 'string'],
-            'status' => ['required', Rule::enum(Status::class)],
-            'complexity' => ['required', Rule::enum(Complexity::class)],
-            'urgency' => ['required', 'int', 'min:1', 'max:10'],
+            'status' => ['nullable', Rule::enum(Status::class)],
+            'complexity' => ['nullable', Rule::enum(Complexity::class)],
+            'urgency' => ['nullable', 'int', 'min:1', 'max:10'],
             'deadlineAt' => ['nullable', 'date', 'date_format:d-m-Y'],
         ];
     }

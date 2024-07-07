@@ -11,8 +11,8 @@ return new class () extends Migration {
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->foreignId('task_id');
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('task_id')->constrained('tasks')->onDelete('cascade');
             $table->text('text');
             $table->timestamp('created_at')->useCurrent();
         });

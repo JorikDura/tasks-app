@@ -17,8 +17,7 @@ class Comment extends Model
     protected $fillable = [
         'user_id',
         'task_id',
-        'text',
-        'created_at',
+        'text'
     ];
 
     public function user(): BelongsTo
@@ -34,7 +33,7 @@ class Comment extends Model
     protected function casts(): array
     {
         return [
-            'created_at' => 'datetime',
+            'created_at' => 'date',
         ];
     }
 }
