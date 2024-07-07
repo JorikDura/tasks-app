@@ -23,7 +23,51 @@ describe('tasks', function () {
             ->assertStatus(200);
     });
 
-    it('status 404', function () {
+    it('field status', function () {
+        actingAs($this->user)
+            ->get(
+                uri: '/api/v1/tasks?status=5',
+                headers: [
+                    'Accept' => 'application/json'
+                ]
+            )
+            ->assertStatus(200);
+    });
+
+    it('field status 422', function () {
+        actingAs($this->user)
+            ->get(
+                uri: '/api/v1/tasks?status=666',
+                headers: [
+                    'Accept' => 'application/json'
+                ]
+            )
+            ->assertStatus(422);
+    });
+
+    it('field deadline', function () {
+        actingAs($this->user)
+            ->get(
+                uri: '/api/v1/tasks?deadline[eq]=24-01-2024',
+                headers: [
+                    'Accept' => 'application/json'
+                ]
+            )
+            ->assertStatus(200);
+    });
+
+    it('field deadline wrong', function () {
+        actingAs($this->user)
+            ->get(
+                uri: '/api/v1/tasks?deadline[????test!!!!]=24-01-2024',
+                headers: [
+                    'Accept' => 'application/json'
+                ]
+            )
+            ->assertStatus(415);
+    });
+
+    it('status 401', function () {
         get(
             uri: '/api/v1/tasks',
             headers: [
@@ -86,8 +130,7 @@ describe('tasks', function () {
                 headers: [
                     'Accept' => 'application/json'
                 ]
-            )
-            ->assertStatus(200);
+            )->assertStatus(200);
 
         assertDatabaseMissing(
             table: 'tasks',

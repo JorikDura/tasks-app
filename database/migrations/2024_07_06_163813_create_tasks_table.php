@@ -21,7 +21,7 @@ return new class () extends Migration {
             $table->smallInteger('urgency')->default(0);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
-            $table->timestamp('deadline_at')->nullable();
+            $table->date('deadline_at')->nullable();
 
             $table->foreign('creator_id')->on('users')->references('id');
             $table->foreign('performer_id')->on('users')->references('id');

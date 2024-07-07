@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api\V1\Tasks;
 
+use App\Filters\Api\V1\Tasks\DeadlineSearchFilter;
+use App\Filters\Api\V1\Tasks\StatusFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Tasks\IndexTaskRequest;
 use App\Http\Resources\Api\V1\Tasks\PreviewTaskResource;
@@ -23,7 +25,8 @@ class IndexController extends Controller
 
         $tasksQuery = Pipeline::send(Task::query())
             ->through([
-
+                StatusFilter::class,
+                DeadlineSearchFilter::class
             ])
             ->thenReturn();
 

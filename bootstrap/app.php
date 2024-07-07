@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\Api\V1\Filters\FilterException;
 use App\Http\Middleware\LocalizationMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -30,6 +31,15 @@ return Application::configure(basePath: dirname(__DIR__))
                     'message' => 'no such model',
                 ],
                 status: Response::HTTP_NOT_FOUND
+            );
+        });
+        $exceptions->render(function (FilterException $e) {
+            return response()->json(
+                data: [
+                    'status' => 'failed',
+                    'message' => $e->getMessage(),
+                ],
+                status: Response::HTTP_UNSUPPORTED_MEDIA_TYPE
             );
         });
     })->create();
