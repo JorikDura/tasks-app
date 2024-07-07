@@ -6,16 +6,16 @@ namespace App\Actions\Comments;
 
 use App\Http\Requests\Api\V1\Comments\StoreCommentRequest;
 use App\Models\Comment;
+use App\Models\Task;
 
 final class StoreCommentAction
 {
     public function __invoke(StoreCommentRequest $request, int $taskId): Comment
     {
-        $comment = Comment::create([
-            'user_id' => auth()->id() ?? 1 /* TODO:REMOVE 1 */,
+        return Task::findOrFail($taskId)->comments()->create([
+            'user_id' => auth()->id(),
             'task_id' => $taskId,
             'text' => $request->validated('text'),
         ])->refresh();
-        return $comment;
     }
 }
