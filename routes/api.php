@@ -29,17 +29,17 @@ Route::group(['prefix' => 'v1'], function () {
         'middleware' => [
             'auth:sanctum',
             'ability:'.TokenAbility::ACCESS_TOKEN->value
-        ]
+        ],
+        'prefix' => 'tasks'
     ], function () {
-        Route::group(['prefix' => 'tasks'], function () {
-            Route::get('/', TasksIndexController::class);
-            Route::get('/{id}', TasksShowController::class);
-            Route::post('/', TasksStoreController::class);
-            Route::patch('/{id}', TasksUpdateController::class);
-            Route::delete('/{task}', TasksDeleteController::class);
-
-            Route::post('/{id}/comment', CommentsStoreController::class);
-            Route::delete('/{taskId}/comment/{commentId}', CommentsDeleteController::class);
-        });
+        Route::get('/', TasksIndexController::class);
+        Route::get('/{id}', TasksShowController::class);
+        Route::post('/', TasksStoreController::class);
+        Route::patch('/{task}', TasksUpdateController::class)
+            ->can('update', 'task');
+        Route::delete('/{task}', TasksDeleteController::class)
+            ->can('delete', 'task');
+        Route::post('/{id}/comment', CommentsStoreController::class);
+        Route::delete('/{taskId}/comment/{commentId}', CommentsDeleteController::class);
     });
 });

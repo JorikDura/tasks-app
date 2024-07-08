@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Comment;
 use App\Models\Task;
 use App\Models\User;
 
@@ -47,5 +48,18 @@ describe('comments test', function () {
                 'text' => 'canst thou no see? test!'
             ]
         );
+    });
+
+    it('cant delete', function () {
+        $comment = Comment::factory()->create();
+        $user = User::factory()->create();
+        actingAs($user)
+            ->delete(
+                uri: "api/v1/tasks/$comment->task_id/comment/$comment->id",
+                headers: [
+                    'Accept' => 'application/json'
+                ]
+            )
+            ->assertStatus(403);
     });
 });

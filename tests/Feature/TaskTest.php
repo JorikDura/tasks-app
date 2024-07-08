@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Task;
 use App\Models\User;
 
 use function Pest\Laravel\actingAs;
@@ -139,5 +140,32 @@ describe('tasks', function () {
                 'description' => 'u have done well',
             ]
         );
+    });
+
+    it('cant update & delete', function () {
+        $taskId = Task::factory()->create()->id;
+
+        $user = User::factory()->create();
+
+        actingAs($user)
+            ->post(
+                uri: "/api/v1/tasks/$taskId",
+                data: [
+                    '_method' => 'patch',
+                    'title' => 'still testing!',
+                    'description' => 'u have done well',
+                ],
+                headers: [
+                    'Accept' => 'application/json'
+                ]
+            )->assertStatus(403);
+
+        actingAs($user)
+            ->delete(
+                uri: "/api/v1/tasks/$taskId",
+                headers: [
+                    'Accept' => 'application/json'
+                ]
+            )->assertStatus(403);
     });
 });

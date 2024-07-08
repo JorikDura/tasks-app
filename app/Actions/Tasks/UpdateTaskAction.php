@@ -9,10 +9,8 @@ use App\Models\Task;
 
 final class UpdateTaskAction
 {
-    public function __invoke(UpdateTaskRequest $request, int $id): Task
+    public function __invoke(UpdateTaskRequest $request, Task $task): Task
     {
-        $task = Task::with(['creator', 'performer'])
-            ->findOrFail($id);
         return tap($task)->update([
             'performer_id' => $request->validated('performerId', $task->performer_id),
             'title' => $request->validated('title', $task->title),
@@ -21,6 +19,11 @@ final class UpdateTaskAction
             'complexity' => $request->validated('complexity', $task->complexity),
             'urgency' => $request->validated('urgency', $task->urgency),
             'deadline_at' => $request->validated('deadlineAt', $task->deadline_at)
-        ])->refresh();
+        ])->load(
+            [
+                'performer',
+                'creator'
+            ]
+        );
     }
 }
