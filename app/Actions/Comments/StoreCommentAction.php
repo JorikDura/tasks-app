@@ -16,6 +16,6 @@ final class StoreCommentAction
             'user_id' => auth()->id(),
             'task_id' => $taskId,
             'text' => $request->validated('text'),
-        ])->refresh();
+        ])->refresh()->load(['user']);
     }
 }
